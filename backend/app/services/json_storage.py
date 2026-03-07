@@ -1,39 +1,67 @@
-import os
+from backend.app.services.database import SessionLocal
+from backend.app.services.models import User, Ride
 import json
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
-
-DATA_FOLDER = os.path.join(BASE_DIR, "data")
-
-RIDES_FILE = os.path.join(DATA_FOLDER, "rides.json")
-USERS_FILE = os.path.join(DATA_FOLDER, "users.json")
-
-
-def load_rides():
-
-    if not os.path.exists(RIDES_FILE):
-        return []
-
-    with open(RIDES_FILE) as f:
-        return json.load(f)
-
-
-def save_rides(rides):
-
-    with open(RIDES_FILE, "w") as f:
-        json.dump(rides, f, indent=4)
-
-
 def load_users():
+    db = SessionLocal()
+    users = db.query(User).all()
+    db.close()
 
-    if not os.path.exists(USERS_FILE):
-        return []
-
-    with open(USERS_FILE) as f:
-        return json.load(f)
+    return [u.__dict__ for u in users]
 
 
 def save_users(users):
+    db = SessionLocal()
 
-    with open(USERS_FILE, "w") as f:
-        json.dump(users, f, indent=4)
+    db.query(User).delete()
+
+    for u in users:
+        user = User(**u)
+        db.add(user)
+
+    db.commit()
+    db.close()
+
+
+def load_rides():
+    db = SessionLocal()
+    rides = db.query(Ride).all()
+    db.close()
+
+    result = []
+
+    for r in rides:
+        ride = r.__dict__
+
+        ride["joined_users"] = json.loads(r.joined_users or "[]")
+        ride["pending_requests"] = json.loads(r.pending_requests or "[]")
+        ride["messages"] = json.loads(r.messages or "[]")
+
+        result.append(ride)
+
+    return result
+
+
+def save_rides(rides):
+    db = SessionLocal()
+
+    db.query(Ride).delete()
+
+    for r in rides:
+        ride = Ride(
+            ride_id=r["ride_id"],
+            creator_email=r["creator_email"],
+            from_location=r["from"],
+            to_location=r["to"],
+            time=r["time"],
+            seats_total=r["seats_total"],
+            seats_available=r["seats_available"],
+            joined_users=json.dumps(r["joined_users"]),
+            pending_requests=json.dumps(r["pending_requests"]),
+            messages=json.dumps(r["messages"])
+        )
+
+        db.add(ride)
+
+    db.commit()
+    db.close()

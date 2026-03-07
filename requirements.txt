@@ -87,4 +87,5 @@ numpy
 joblib
 Werkzeug
 
-
+sqlalchemy
+psycopg2-binary
