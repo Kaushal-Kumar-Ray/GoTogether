@@ -1,0 +1,242 @@
+{% extends "layout.html" %}
+{% block title %}AI Route Optimizer - GoTogether{% endblock %}
+
+{% block content %}
+
+<div class="ai-wrapper container">
+
+  <div class="ai-header">
+    <h1>AI Route Optimizer</h1>
+    <p>Enter your stops — we'll calculate the best order, distance, time, and cost split.</p>
+  </div>
+
+  <!-- Stops Panel -->
+  <div class="ai-card">
+    <div class="ai-section-title">Stops</div>
+    <div id="stops-container" class="stops-container"></div>
+    <button class="ai-add-stop" onclick="addStop()">＋ Add Stop</button>
+  </div>
+
+  <!-- Optimize Button -->
+  <button id="optimize-btn" class="ai-optimize-btn" onclick="optimizeRoute()">
+    Optimize Route
+  </button>
+
+  <!-- Trip Stats -->
+  <div id="stats-card" class="ai-card hidden">
+    <div class="ai-section-title">Trip Stats</div>
+
+    <div class="ai-stats-grid">
+      <div class="ai-stat">
+        <span>Distance</span>
+        <h3 id="val-dist">—</h3>
+      </div>
+      <div class="ai-stat">
+        <span>Duration</span>
+        <h3 id="val-time">—</h3>
+      </div>
+      <div class="ai-stat">
+        <span>Stops</span>
+        <h3 id="val-stops">—</h3>
+      </div>
+      <div class="ai-stat">
+        <span>Fuel Cost</span>
+        <h3 id="val-cost">—</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Route Order -->
+  <div id="route-card" class="ai-card hidden">
+    <div class="ai-section-title">Route Order</div>
+    <div id="route-list" class="ai-route-list"></div>
+  </div>
+
+  <!-- Cost Breakdown -->
+  <div id="cost-card" class="ai-card hidden">
+    <div class="ai-section-title">Cost Split</div>
+    <div id="cost-breakdown"></div>
+  </div>
+
+</div>
+
+<div id="error-toast" class="ai-error-toast"></div>
+
+<script>
+const FUEL_RATE = 10;
+
+document.addEventListener("DOMContentLoaded", () => {
+  addStop("");
+  addStop("");
+});
+
+function addStop(value = "") {
+  const container = document.getElementById("stops-container");
+  const index = document.querySelectorAll(".ai-stop-input").length;
+
+  const row = document.createElement("div");
+  row.className = "ai-stop-row";
+
+  row.innerHTML = `
+    <div class="ai-stop-dot">${index + 1}</div>
+    <input 
+      class="ai-stop-input"
+      placeholder="${index === 0 ? "Starting point" : index === 1 ? "Destination" : "Stop " + (index + 1)}"
+      value="${value}"
+    />
+    <button class="ai-remove-btn">×</button>
+  `;
+
+  row.querySelector(".ai-remove-btn").onclick = () => {
+    if (document.querySelectorAll(".ai-stop-row").length <= 2) {
+      showError("Need at least 2 stops");
+      return;
+    }
+    row.remove();
+    renumberStops();
+  };
+
+  container.appendChild(row);
+}
+
+function renumberStops() {
+  document.querySelectorAll(".ai-stop-dot").forEach((dot, i) => {
+    dot.textContent = i + 1;
+  });
+}
+
+function getStops() {
+  return Array.from(document.querySelectorAll(".ai-stop-input"))
+    .map(input => input.value.trim())
+    .filter(Boolean);
+}
+
+async function optimizeRoute() {
+  const stops = getStops();
+  if (stops.length < 2) {
+    showError("Enter at least 2 stops");
+    return;
+  }
+
+  const btn = document.getElementById("optimize-btn");
+  btn.classList.add("loading");
+  btn.textContent = "Calculating...";
+
+  hideResults();
+
+  try {
+    const res = await fetch("/ai/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: stops.join(" - ") })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      showError(data.error || "Optimization failed");
+      return;
+    }
+
+    const { distKm, durMin } = parseAnswer(data.answer);
+
+    renderStats(distKm, durMin, stops.length);
+    renderRoute(stops);
+    renderCost(distKm, 1);
+
+  } catch (err) {
+    showError("Server error — try again");
+  } finally {
+    btn.classList.remove("loading");
+    btn.textContent = "Optimize Route";
+  }
+}
+
+function parseAnswer(text) {
+  const distMatch = text.match(/([\d.]+)\s*km/);
+  const timeMatch = text.match(/([\d.]+)\s*minutes/);
+
+  return {
+    distKm: distMatch ? parseFloat(distMatch[1]).toFixed(1) : null,
+    durMin: timeMatch ? Math.round(parseFloat(timeMatch[1])) : null
+  };
+}
+
+function renderStats(dist, time, stops) {
+  document.getElementById("val-dist").textContent = dist ? dist + " km" : "—";
+  document.getElementById("val-time").textContent = formatTime(time);
+  document.getElementById("val-stops").textContent = stops;
+  document.getElementById("val-cost").textContent = dist ? "₹" + Math.round(dist * FUEL_RATE) : "—";
+
+  document.getElementById("stats-card").classList.remove("hidden");
+}
+
+function renderRoute(stops) {
+  const list = document.getElementById("route-list");
+  list.innerHTML = stops.map((s, i) => `
+    <div class="ai-route-item">
+      <div class="ai-route-num">${i + 1}</div>
+      <span>${s}</span>
+    </div>
+  `).join("");
+
+  document.getElementById("route-card").classList.remove("hidden");
+}
+
+function renderCost(dist, passengers) {
+  if (!dist) return;
+
+  const total = Math.round(dist * FUEL_RATE);
+  const perPerson = Math.round(total / passengers);
+
+  document.getElementById("cost-breakdown").innerHTML = `
+  <div class="ai-cost-row">
+    <span>Distance</span>
+    <span>${dist} km</span>
+  </div>
+
+  <div class="ai-cost-row">
+    <span>Fuel Rate</span>
+    <span>₹${FUEL_RATE}/km</span>
+  </div>
+
+  <div class="ai-cost-row">
+    <span>Total Fuel Cost</span>
+    <span>₹${total}</span>
+  </div>
+
+  <div class="ai-cost-row">
+    <span>Passengers</span>
+    <span>${passengers}</span>
+  </div>
+
+  <div class="ai-cost-row highlight">
+    <span>Per Person</span>
+    <span>₹${perPerson}</span>
+  </div>
+`;
+
+  document.getElementById("cost-card").classList.remove("hidden");
+}
+
+function formatTime(minutes) {
+  if (!minutes) return "—";
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
+function hideResults() {
+  ["stats-card","route-card","cost-card"].forEach(id => {
+    document.getElementById(id).classList.add("hidden");
+  });
+}
+
+function showError(msg) {
+  const toast = document.getElementById("error-toast");
+  toast.textContent = "⚠ " + msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 4000);
+}
+</script>
+
+{% endblock %}

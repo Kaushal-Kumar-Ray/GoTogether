@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block title %}Emergency SOS - GoTogether{% endblock %}
+{% block content %}
+
+<section class="sos-section">
+    <h1>Emergency SOS</h1>
+
+    <div class="sos-wrapper">
+        <button class="sos-button" onclick="triggerSOS()" aria-label="Emergency SOS">
+            SOS
+        </button>
+    </div>
+
+    <div class="emergency-contacts">
+        <h3>Emergency Contacts</h3>
+        <div class="contact-list">
+           
+            <p>🚓 <strong>Police:</strong> 112</p>
+            <p>🚑 <strong>Ambulance:</strong> 108</p>
+            <p>🔥 <strong>Fire Department:</strong> 101</p>
+        </div>
+    </div>
+</section>
+
+<script>
+async function triggerSOS() {
+    if (!confirm("This will send your live location to your registered email. Continue?")) {
+        return;
+    }
+
+    if (!navigator.geolocation) {
+        alert("Geolocation not supported by your browser.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(async function(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+            const res = await fetch("/sos/send_location", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ latitude: lat, longitude: lon })
+            });
+
+            const result = await res.json();
+
+            if (res.ok) {
+                alert("Emergency location sent to your email.");
+            } else {
+                alert(result.error || "Failed to send location.");
+            }
+
+        } catch (error) {
+            alert("Server error.");
+            console.error(error);
+        }
+
+    }, function(error) {
+        alert("Location access denied.");
+    });
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard - GoTogether{% endblock %}
+{% block content %}
+
+<!-- Create/Search Ride Section -->
+<section class="glass-panel">
+    <h1>Create or Search Ride</h1>
+    
+    <form method="POST" action="/create_ride" class="ride-form">
+        <div class="input-wrapper">
+            <label class="input-label" for="fromInput">From Location</label>
+            <input 
+                type="text" 
+                name="from" 
+                id="fromInput" 
+                placeholder="Enter start location" 
+                required
+                aria-label="From Location"
+            >
+        </div>
+
+<div class="input-wrapper">
+            <label class="input-label" for="toInput">Destination</label>
+            <input 
+                type="text" 
+                name="to" 
+                id="toInput" 
+                placeholder="Enter end location" 
+                required
+                aria-label="Destination"
+            >
+        </div>
+
+<div class="input-wrapper">
+            <label class="input-label" for="timeInput">Departure Time</label>
+            <input 
+                type="time" 
+                name="time"
+                id="timeInput" 
+                required
+                aria-label="Departure Time"
+            >
+        </div>
+        
+        <div class="input-wrapper">
+            <label class="input-label" for="seatsInput">Available Seats</label>
+            <input 
+                type="number" 
+                name="seats"
+                id="seatsInput" 
+                min="1" 
+                max="10"
+                placeholder="Number of seats" 
+                required
+                aria-label="Number of Seats"
+            >
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-create">Create Ride</button>
+            <button type="button" onclick="searchRides()" class="btn-search">Search Rides</button>
+        </div>
+    </form>
+</section>
+
+<!-- Ride Listings created by the user -->
+ <section>
+    <h2>Your Created Rides</h2>
+
+    <div class="ride-grid">
+        {% if created_rides %}
+            {% for ride in created_rides %}
+                <div class="ride-card">
+                    <h3>{{ ride.from }} → {{ ride.to }}</h3>
+                    <p><strong>Departure:</strong> {{ ride.time }}</p>
+                    <p><strong>Seats Available:</strong> {{ ride.seats_available }}/{{ ride.seats_total }}</p>
+
+                   <a href="/delete/{{ ride.ride_id }}" class="delete-btn" onclick="return confirm('Delete this ride?')">Delete</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                No rides created yet. Start by creating one above!
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

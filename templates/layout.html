@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GoTogether - Smart Campus Ride Sharing Platform">
+    <meta name="theme-color" content="#0066cc">
+    <title>{% block title %}GoTogether - Campus Ride Sharing{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://kit.fontawesome.com/3e1f73c7e4.js" crossorigin="anonymous"></script>
+</head>
+<body data-username="{{ session.get('name') }}">
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">🚀 GoTogether</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/rides">Rides</a>
+            <a href="/ai">AI</a>
+            <a href="/sos">SOS</a>
+            
+            <a href="/support">Support</a>
+            <a href="/profile">Profile</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

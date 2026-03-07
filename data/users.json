@@ -1,0 +1,15 @@
+[
+    {
+        "email": "raykaushal456@gmail.com",
+        "first_name": "Kaushal",
+        "last_name": "Ray",
+        "dob": "2004-04-27",
+        "contact": "+9777739438755",
+        "password": "scrypt:32768:8:1$QMiyIhSJGDSvnLxL$3b4a51716c1dc0419d20b6d429f4eed90c2091ff5ea7494a093494fc4aeeb877f46577c43dc6f1fb08b8f955a54a034a537b14c12777baa5d134a880d46d2705",
+        "security_q1": "pet",
+        "security_a1": "cow",
+        "security_q2": "movie",
+        "security_a2": "marvel",
+        "active_ride_id": "ec11cac6-9dbd-451f-a71d-592d354931ef"
+    }
+]

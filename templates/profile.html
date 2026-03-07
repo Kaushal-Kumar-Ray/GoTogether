@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}Profile - GoTogether{% endblock %}
+{% block content %}
+
+<section class="glass-panel">
+    <h1>Your Profile</h1>
+
+    <!-- Personal Information -->
+    <div class="profile-section">
+        <h3>Personal Information</h3>
+        <div class="profile-info">
+            <p><strong>Full Name:</strong> {{ first_name }} {{ last_name }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
+            <p><strong>Date of Birth:</strong> {{ dob }}</p>
+            <p><strong>Contact Number:</strong> {{ contact }}</p>
+        </div>
+    </div>
+<!-- Ride Stats -->
+    <div class="profile-section">
+        <h3>Ride Statistics</h3>
+        <div class="profile-stats">
+            <div class="stat-item">
+                <span class="stat-icon">🚗</span>
+                <div>
+                    <p class="stat-label">Rides Created</p>
+                    <p class="stat-value">{{ rides_created }}</p>
+                </div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">🤝</span>
+                <div>
+                    <p class="stat-label">Rides Joined</p>
+                    <p class="stat-value">{{ rides_joined }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Actions -->
+    <div class="profile-actions">
+        <a href="/logout" class="btn-search">Logout</a>
+    </div>
+</section>
+
+{% endblock %}

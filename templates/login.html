@@ -1,0 +1,210 @@
+{% extends "layout.html" %}
+{% block title %}Login - GoTogether{% endblock %}
+{% block content %}
+
+<section class="glass-panel">
+    <h1>Login</h1>
+
+    <form onsubmit="event.preventDefault(); loginUser();">
+        <div class="input-wrapper">
+            <label class="input-label" for="email">Email Address</label>
+            <input 
+                type="email" 
+                id="email" 
+                placeholder="your.email@example.com"
+                required
+                autocomplete="email"
+                aria-label="Email Address"
+            >
+        </div>
+        
+        <div class="input-wrapper">
+            <label class="input-label" for="password">Password</label>
+            <input 
+                type="password" 
+                id="password" 
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+                aria-label="Password"
+            >
+        </div>
+
+        <button type="submit">Login</button>
+
+        <p style="margin-top:20px; text-align: center;">
+            New user? <a href="/register">Register here</a>
+        </p>
+    </form>
+
+    <!-- FORGOT PASSWORD SECTION -->
+    <div id="forgotSection" style="display:none; margin-top:30px;">
+        <h3>Verify Security Questions</h3>
+
+        <div class="input-wrapper">
+            <label class="input-label" for="fp_email">Email Address</label>
+            <input 
+                type="email" 
+                id="fp_email" 
+                placeholder="Enter your email"
+                aria-label="Email Address"
+            >
+        </div>
+
+        <div class="input-wrapper">
+            <label class="input-label" for="fp_answer1">Answer to Question 1</label>
+            <input 
+                type="text" 
+                id="fp_answer1" 
+                placeholder="Your answer"
+                aria-label="Security Answer 1"
+            >
+        </div>
+
+        <div class="input-wrapper">
+            <label class="input-label" for="fp_answer2">Answer to Question 2</label>
+            <input 
+                type="text" 
+                id="fp_answer2" 
+                placeholder="Your answer"
+                aria-label="Security Answer 2"
+            >
+        </div>
+
+        <button onclick="verifySecurity()">Verify Answers</button>
+
+        <div id="resetOtpSection" style="display:none; margin-top:20px;">
+            <div class="input-wrapper">
+                <label class="input-label" for="fp_otp">OTP Code</label>
+                <input 
+                    type="text" 
+                    id="fp_otp" 
+                    placeholder="Enter 6-digit OTP"
+                    maxlength="6"
+                    aria-label="OTP Code"
+                >
+            </div>
+
+            <div class="input-wrapper">
+                <label class="input-label" for="fp_new_password">New Password</label>
+                <input 
+                    type="password" 
+                    id="fp_new_password" 
+                    placeholder="Enter new password"
+                    minlength="6"
+                    aria-label="New Password"
+                >
+            </div>
+
+            <button onclick="resetPassword()">Reset Password</button>
+        </div>
+    </div>
+
+    <p style="margin-top:20px; text-align: center;">
+        <a href="#" onclick="event.preventDefault(); document.getElementById('forgotSection').style.display='block';">Forgot Password?</a>
+    </p>
+</section>
+
+<script>
+async function loginUser() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    
+    if (!email || !password) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    const data = { email, password };
+
+    try {
+        const res = await fetch("/login_user", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (result.redirect) {
+            window.location.href = result.redirect;
+        } else {
+            alert(result.error || "Login failed");
+        }
+    } catch (error) {
+        alert("An error occurred. Please try again.");
+        console.error(error);
+    }
+}
+
+// ================= FORGOT PASSWORD =================
+
+async function verifySecurity() {
+    const data = {
+        email: document.getElementById("fp_email").value,
+        answer1: document.getElementById("fp_answer1").value,
+        answer2: document.getElementById("fp_answer2").value
+    };
+
+    if (!data.email || !data.answer1 || !data.answer2) {
+        alert("Please fill all security details");
+        return;
+    }
+
+    try {
+        const res = await fetch("/forgot_password/verify_security", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            alert("Security answers verified. OTP sent to your email.");
+            document.getElementById("resetOtpSection").style.display = "block";
+        } else {
+            alert(result.error || "Verification failed");
+        }
+
+    } catch (error) {
+        alert("An error occurred. Please try again.");
+        console.error(error);
+    }
+}
+
+async function resetPassword() {
+    const data = {
+        email: document.getElementById("fp_email").value,
+        otp: document.getElementById("fp_otp").value,
+        new_password: document.getElementById("fp_new_password").value
+    };
+
+    if (!data.otp || !data.new_password) {
+        alert("OTP and new password required");
+        return;
+    }
+
+    try {
+        const res = await fetch("/reset_password", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            alert("Password reset successful");
+            window.location.href = "/login";
+        } else {
+            alert(result.error || "Failed to reset");
+        }
+    } catch (error) {
+        alert("Something went wrong.");
+        console.error(error);
+    }
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+{% block title %}Available Rides - GoTogether{% endblock %}
+{% block content %}
+
+<section>
+    <h1>Available Rides</h1>
+    <div id="rides-container" class="ride-grid"></div>
+</section>
+
+<!-- Chat Modal -->
+<aside id="chat-modal" class="chat-overlay hidden" role="dialog" aria-labelledby="chat-title" aria-modal="true">
+    <div class="chat-container">
+        
+        <header class="chat-header">
+            <h3 id="chat-title">🚗 Ride Chat</h3>
+            <button 
+                class="chat-close" 
+                onclick="closeChat()" 
+                aria-label="Close chat"
+                type="button"
+                id="chat-close-btn"
+            >×</button>
+        </header>
+
+        <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
+
+        <form id="chat-form" class="chat-input-area">
+            <input 
+                type="text" 
+                id="chat-input" 
+                placeholder="Type your message..." 
+                required
+                aria-label="Message input"
+                autocomplete="off"
+            >
+            <button type="submit" aria-label="Send message">➤</button>
+        </form>
+
+    </div>
+</aside>
+
+<!-- ============================
+     LEAVE RIDE MODAL
+============================= -->
+<div id="leave-modal" class="leave-modal-overlay hidden" role="dialog" aria-labelledby="leave-modal-title" aria-modal="true">
+    <div class="leave-modal-container">
+
+        <div class="leave-modal-header">
+            <span class="leave-modal-icon">🚪</span>
+            <h3 id="leave-modal-title">Leave Ride</h3>
+        </div>
+
+        <div class="leave-modal-body">
+            <p>Please let your fellow riders know why you're leaving. Your reason will be posted as a message in the ride chat.</p>
+
+            <form id="leave-form">
+                <label class="leave-reason-label" for="leave-reason">Reason for leaving</label>
+                <textarea
+                    id="leave-reason"
+                    class="leave-reason-input"
+                    placeholder="e.g. Change of plans, found another ride, schedule conflict..."
+                    maxlength="300"
+                    aria-label="Reason for leaving"
+                ></textarea>
+                <p id="leave-error" class="leave-error-msg hidden"></p>
+            </form>
+        </div>
+
+        <div class="leave-modal-footer">
+            <button
+                id="leave-submit-btn"
+                class="leave-submit-btn"
+                type="button"
+                onclick="document.getElementById('leave-form').dispatchEvent(new Event('submit'))"
+            >
+                Leave Ride
+            </button>
+            <button
+                class="leave-cancel-btn"
+                type="button"
+                onclick="closeLeaveModal()"
+            >
+                Cancel
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<style>
+@media (max-width: 480px) {
+    #chat-close-btn {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: all !important;
+    }
+    .chat-overlay { cursor: pointer; }
+    .chat-container { cursor: default; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatOverlay = document.getElementById('chat-modal');
+    const chatContainer = document.querySelector('.chat-container');
+    const closeBtn = document.getElementById('chat-close-btn');
+
+    if (chatOverlay) {
+        chatOverlay.addEventListener('click', function(e) {
+            if (e.target === chatOverlay) closeChat();
+        });
+    }
+    if (chatContainer) {
+        chatContainer.addEventListener('click', function(e) { e.stopPropagation(); });
+    }
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeChat();
+        });
+    }
+
+    let touchStartY = 0;
+    if (chatContainer) {
+        chatContainer.addEventListener('touchstart', function(e) {
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        chatContainer.addEventListener('touchend', function(e) {
+            if (e.changedTouches[0].screenY - touchStartY > 100) closeChat();
+        }, { passive: true });
+    }
+
+    const leaveContainer = document.querySelector('.leave-modal-container');
+    if (leaveContainer) {
+        leaveContainer.addEventListener('click', function(e) { e.stopPropagation(); });
+    }
+});
+
+if (typeof closeChat !== 'function') {
+    window.closeChat = function() {
+        const m = document.getElementById('chat-modal');
+        if (m) m.classList.add('hidden');
+    };
+}
+</script>
+
+{% endblock %}
