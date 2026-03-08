@@ -90,3 +90,4 @@ Werkzeug
 sqlalchemy
 psycopg2-binary
 resend
+python-dotenv
