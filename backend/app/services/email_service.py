@@ -1,34 +1,44 @@
 import os
-import smtplib
-from email.mime.text import MIMEText
+import requests
 
-SMTP_SERVER = os.environ.get("SMTP_SERVER")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
-SMTP_USER = os.environ.get("SMTP_USER")
-SMTP_PASS = os.environ.get("SMTP_PASS")
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
 
 
 def send_email(receiver_email, otp):
 
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    headers = {
+        "accept": "application/json",
+        "api-key": BREVO_API_KEY,
+        "content-type": "application/json"
+    }
+
+    data = {
+        "sender": {
+            "name": "GoTogether",
+            "email": "raykaushal456@gmail.com"
+        },
+        "to": [
+            {"email": receiver_email}
+        ],
+        "subject": "GoTogether OTP Verification",
+        "htmlContent": f"""
+        <h2>GoTogether Verification Code</h2>
+        <p>Your OTP is:</p>
+        <h1>{otp}</h1>
+        <p>This code expires in 5 minutes.</p>
+        """
+    }
+
     try:
-        msg = MIMEText(f"""
-GoTogether Verification Code
+        response = requests.post(url, json=data, headers=headers)
 
-Your OTP is: {otp}
-
-This code expires in 5 minutes.
-""")
-
-        msg["Subject"] = "GoTogether OTP Verification"
-        msg["From"] = SMTP_USER
-        msg["To"] = receiver_email
-
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASS)
-            server.send_message(msg)
-
-        return True
+        if response.status_code == 201:
+            return True
+        else:
+            print("Email error:", response.text)
+            return False
 
     except Exception as e:
         print("Email error:", e)
