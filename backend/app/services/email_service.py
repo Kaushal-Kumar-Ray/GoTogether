@@ -1,25 +1,23 @@
-import smtplib
 import os
-from email.message import EmailMessage
+import resend
 
-SENDER_EMAIL = os.environ.get("raykaushal456@gmail.com")
-SENDER_PASSWORD = os.environ.get("opeqtylcxpjensjf")
+resend.api_key = os.environ.get("re_59qS8ucT_Kk8MfVV95C39epbduVhiRxa1")
 
 
 def send_email(receiver_email, otp):
 
-    msg = EmailMessage()
-    msg.set_content(f"Your GoTogether Verification Code is: {otp}")
-    msg["Subject"] = "GoTogether OTP"
-    msg["From"] = SENDER_EMAIL
-    msg["To"] = receiver_email
-
     try:
-        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
-        server.starttls()
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        server.send_message(msg)
-        server.quit()
+        resend.Emails.send({
+            "from": "GoTogether <onboarding@resend.dev>",
+            "to": receiver_email,
+            "subject": "GoTogether OTP Verification",
+            "html": f"""
+                <h2>GoTogether Verification Code</h2>
+                <p>Your OTP is:</p>
+                <h1>{otp}</h1>
+                <p>This code expires in 5 minutes.</p>
+            """
+        })
 
     except Exception as e:
-        print("Email error:", e)    
+        print("Email error:", e)
