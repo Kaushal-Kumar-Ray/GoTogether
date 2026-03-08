@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request, jsonify, session
-from email.mime.text import MIMEText
-import smtplib
-
-from backend.app.services.email_service import SENDER_EMAIL, SENDER_PASSWORD
+import os
+import resend
 
 sos_bp = Blueprint("sos", __name__)
+
+# Set Resend API key from environment variable
+resend.api_key = os.environ.get("re_59qS8ucT_Kk8MfVV95C39epbduVhiRxa1")
 
 
 # -------- SOS PAGE -------- #
@@ -34,34 +35,34 @@ def send_sos_location():
 
     maps_link = f"https://www.google.com/maps?q={latitude},{longitude}"
 
-    message_body = f"""
-🚨 EMERGENCY ALERT 🚨
-
-Latitude: {latitude}
-Longitude: {longitude}
-
-View on Google Maps:
-{maps_link}
-"""
-
-    msg = MIMEText(message_body)
-
-    msg["Subject"] = "Emergency SOS Location Alert"
-    msg["From"] = SENDER_EMAIL
-    msg["To"] = user_email
-
     try:
 
-        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        resend.Emails.send({
+            "from": "GoTogether <onboarding@resend.dev>",
+            "to": user_email,
+            "subject": "🚨 Emergency SOS Location Alert",
+            "html": f"""
+                <h2>🚨 Emergency Alert</h2>
 
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+                <p>Your SOS button was triggered in <strong>GoTogether</strong>.</p>
 
-        server.send_message(msg)
+                <p><strong>Latitude:</strong> {latitude}</p>
+                <p><strong>Longitude:</strong> {longitude}</p>
 
-        server.quit()
+                <p>
+                <a href="{maps_link}" 
+                   style="background:#e63946;color:white;padding:10px 18px;text-decoration:none;border-radius:6px;">
+                   View Location on Google Maps
+                </a>
+                </p>
+
+                <p>If this was accidental you can ignore this message.</p>
+            """
+        })
 
         return jsonify({"success": True})
 
     except Exception as e:
 
-        return jsonify({"error": str(e)}), 500
+        print("SOS email error:", e)
+        return jsonify({"error": "Failed to send SOS email"}), 500
