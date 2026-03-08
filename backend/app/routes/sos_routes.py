@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, request, jsonify, session
 import os
-import resend
+import requests
 
 sos_bp = Blueprint("sos", __name__)
 
-# Set Resend API key from environment variable
-resend.api_key = os.environ.get("RESEND_API_KEY")
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
 
 
 # -------- SOS PAGE -------- #
@@ -35,34 +34,52 @@ def send_sos_location():
 
     maps_link = f"https://www.google.com/maps?q={latitude},{longitude}"
 
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    headers = {
+        "accept": "application/json",
+        "api-key": BREVO_API_KEY,
+        "content-type": "application/json"
+    }
+
+    payload = {
+        "sender": {
+            "name": "GoTogether",
+            "email": "raykaushal456@gmail.com"
+        },
+        "to": [
+            {"email": user_email}
+        ],
+        "subject": "🚨 Emergency SOS Location Alert",
+        "htmlContent": f"""
+        <h2>🚨 Emergency Alert</h2>
+
+        <p>Your SOS button was triggered in <strong>GoTogether</strong>.</p>
+
+        <p><strong>Latitude:</strong> {latitude}</p>
+        <p><strong>Longitude:</strong> {longitude}</p>
+
+        <p>
+        <a href="{maps_link}"
+        style="background:#e63946;color:white;padding:10px 18px;text-decoration:none;border-radius:6px;">
+        View Location on Google Maps
+        </a>
+        </p>
+
+        <p>If this was accidental you can ignore this message.</p>
+        """
+    }
+
     try:
 
-        resend.Emails.send({
-            "from": "GoTogether <onboarding@resend.dev>",
-            "to": user_email,
-            "subject": "🚨 Emergency SOS Location Alert",
-            "html": f"""
-                <h2>🚨 Emergency Alert</h2>
+        response = requests.post(url, json=payload, headers=headers)
 
-                <p>Your SOS button was triggered in <strong>GoTogether</strong>.</p>
-
-                <p><strong>Latitude:</strong> {latitude}</p>
-                <p><strong>Longitude:</strong> {longitude}</p>
-
-                <p>
-                <a href="{maps_link}" 
-                   style="background:#e63946;color:white;padding:10px 18px;text-decoration:none;border-radius:6px;">
-                   View Location on Google Maps
-                </a>
-                </p>
-
-                <p>If this was accidental you can ignore this message.</p>
-            """
-        })
-
-        return jsonify({"success": True})
+        if response.status_code == 201:
+            return jsonify({"success": True})
+        else:
+            print("Brevo error:", response.text)
+            return jsonify({"error": "Failed to send SOS email"}), 500
 
     except Exception as e:
-
         print("SOS email error:", e)
         return jsonify({"error": "Failed to send SOS email"}), 500
