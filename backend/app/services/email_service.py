@@ -1,7 +1,7 @@
 import os
 import resend
 
-resend.api_key = os.environ.get("re_59qS8ucT_Kk8MfVV95C39epbduVhiRxa1")
+resend.api_key = os.environ.get("re_auarRjU7_LLLbZmmqXqLhHbUQA7RUzx8J")
 
 
 def send_email(receiver_email, otp):
@@ -21,3 +21,4 @@ def send_email(receiver_email, otp):
 
     except Exception as e:
         print("Email error:", e)
+        
