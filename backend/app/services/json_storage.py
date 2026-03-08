@@ -51,16 +51,15 @@ def save_rides(rides):
         ride = Ride(
             ride_id=r["ride_id"],
             creator_email=r["creator_email"],
-            from_location=r["from"],
-            to_location=r["to"],
+            from_location=r["from_location"],
+            to_location=r["to_location"],
             time=r["time"],
             seats_total=r["seats_total"],
             seats_available=r["seats_available"],
             joined_users=json.dumps(r["joined_users"]),
-            pending_requests=json.dumps(r["pending_requests"]),
+             pending_requests=json.dumps(r["pending_requests"]),
             messages=json.dumps(r["messages"])
         )
-
         db.add(ride)
 
     db.commit()
