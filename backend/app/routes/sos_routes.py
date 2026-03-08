@@ -5,7 +5,7 @@ import resend
 sos_bp = Blueprint("sos", __name__)
 
 # Set Resend API key from environment variable
-resend.api_key = os.environ.get("re_auarRjU7_LLLbZmmqXqLhHbUQA7RUzx8J")
+resend.api_key = os.environ.get("RESEND_API_KEY")
 
 
 # -------- SOS PAGE -------- #
