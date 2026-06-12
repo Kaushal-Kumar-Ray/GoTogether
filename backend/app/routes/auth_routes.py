@@ -36,6 +36,11 @@ def is_strong_password(password):
 
 # ---------------- REGISTER PAGE ---------------- #
 
+@auth_bp.route("/landing")
+def landing():
+    return render_template("landing.html")
+
+
 @auth_bp.route("/register")
 def register():
     return render_template("register.html")

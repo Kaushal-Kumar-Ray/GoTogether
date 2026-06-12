@@ -1,38 +1,48 @@
-{% extends "layout.html" %}
+{% extends "layout_public.html" %}
 {% block title %}Register - GoTogether{% endblock %}
 {% block content %}
 
-<section class="glass-panel">
-    <h1>Register</h1>
+<div class="auth-wrapper">
+    <div class="back-to-home"><a href="/landing"><i class="fa-solid fa-arrow-left"></i> Back to Home</a></div>
 
-    <form onsubmit="event.preventDefault();">
-        <div class="input-wrapper">
-            <label class="input-label" for="first_name">First Name</label>
-            <input 
-                id="first_name" 
-                type="text"
-                placeholder="Enter first name"
-                required
-                autocomplete="given-name"
-                aria-label="First Name"
-            >
+    <div class="glass-panel auth-container">
+        <div style="text-align: center; margin-bottom: var(--spacing-lg);">
+            <i class="fa-solid fa-user-plus" style="font-size: 32px; color: var(--primary); margin-bottom: var(--spacing-sm);"></i>
+            <h2 style="margin-bottom: var(--spacing-xs);">Register</h2>
+            <p style="color: var(--text-secondary); font-size: 14px;">Create your GoTogether account</p>
         </div>
+
+        <form onsubmit="event.preventDefault();">
+            <div class="grid" style="gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                <div class="col-6 form-group">
+                    <label class="form-label" for="first_name">First Name</label>
+                    <input 
+                        class="input"
+                        id="first_name" 
+                        type="text"
+                        placeholder="First name"
+                        required
+                        autocomplete="given-name"
+                    >
+                </div>
+                
+                <div class="col-6 form-group">
+                    <label class="form-label" for="last_name">Last Name</label>
+                    <input 
+                        class="input"
+                        id="last_name" 
+                        type="text"
+                        placeholder="Last name"
+                        required
+                        autocomplete="family-name"
+                    >
+                </div>
+            </div>
         
-        <div class="input-wrapper">
-            <label class="input-label" for="last_name">Last Name</label>
+        <div class="form-group">
+            <label class="form-label" for="dob">Date of Birth</label>
             <input 
-                id="last_name" 
-                type="text"
-                placeholder="Enter last name"
-                required
-                autocomplete="family-name"
-                aria-label="Last Name"
-            >
-        </div>
-        
-        <div class="input-wrapper">
-            <label class="input-label" for="dob">Date of Birth</label>
-            <input 
+                class="input"
                 type="date" 
                 id="dob"
                 required
@@ -40,9 +50,10 @@
             >
         </div>
         
-        <div class="input-wrapper">
-            <label class="input-label" for="contact">Contact Number</label>
+        <div class="form-group">
+            <label class="form-label" for="contact">Contact Number</label>
             <input 
+                class="input"
                 id="contact" 
                 type="tel"
                 placeholder="Enter phone number"
@@ -52,9 +63,10 @@
             >
         </div>
         
-        <div class="input-wrapper">
-            <label class="input-label" for="email">Email Address</label>
+        <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
             <input 
+                class="input"
                 type="email" 
                 id="email" 
                 placeholder="your.email@example.com"
@@ -64,9 +76,10 @@
             >
         </div>
         
-        <div class="input-wrapper">
-            <label class="input-label" for="password">Password</label>
+        <div class="form-group">
+            <label class="form-label" for="password">Password</label>
             <input 
+                class="input"
                 type="password" 
                 id="password" 
                 placeholder="Create a password"
@@ -78,9 +91,9 @@
         </div>
 
         <!-- SECURITY QUESTION 1 -->
-        <div class="input-wrapper">
-            <label class="input-label" for="security_q1">Security Question 1</label>
-            <select id="security_q1" required aria-label="Security Question 1">
+        <div class="form-group">
+            <label class="form-label" for="security_q1">Security Question 1</label>
+            <select class="input" id="security_q1" required aria-label="Security Question 1">
                 <option value="">Select a question</option>
                 <option value="pet">What is your first pet name?</option>
                 <option value="school">What is your school name?</option>
@@ -88,9 +101,10 @@
             </select>
         </div>
 
-        <div class="input-wrapper">
-            <label class="input-label" for="security_a1">Answer 1</label>
+        <div class="form-group">
+            <label class="form-label" for="security_a1">Answer 1</label>
             <input 
+                class="input"
                 id="security_a1" 
                 type="text" 
                 placeholder="Your answer"
@@ -100,9 +114,9 @@
         </div>
 
         <!-- SECURITY QUESTION 2 -->
-        <div class="input-wrapper">
-            <label class="input-label" for="security_q2">Security Question 2</label>
-            <select id="security_q2" required aria-label="Security Question 2">
+        <div class="form-group">
+            <label class="form-label" for="security_q2">Security Question 2</label>
+            <select class="input" id="security_q2" required aria-label="Security Question 2">
                 <option value="">Select a question</option>
                 <option value="mother">What is your mother's maiden name?</option>
                 <option value="food">What is your favorite food?</option>
@@ -110,9 +124,10 @@
             </select>
         </div>
 
-        <div class="input-wrapper">
-            <label class="input-label" for="security_a2">Answer 2</label>
+        <div class="form-group">
+            <label class="form-label" for="security_a2">Answer 2</label>
             <input 
+                class="input"
                 id="security_a2" 
                 type="text" 
                 placeholder="Your answer"
@@ -121,11 +136,12 @@
             >
         </div>
 
-        <button type="button" onclick="sendOTP()">Send OTP</button>
+        <button type="button" class="btn btn-secondary" style="width: 100%;" onclick="sendOTP()">Send OTP</button>
 
-        <div class="input-wrapper" style="margin-top: 20px;">
-            <label class="input-label" for="otp">OTP Code</label>
+        <div class="form-group" style="margin-top: 20px;">
+            <label class="form-label" for="otp">OTP Code</label>
             <input 
+                class="input"
                 id="otp" 
                 type="text"
                 placeholder="Enter 6-digit OTP"
@@ -134,20 +150,32 @@
             >
         </div>
 
-        <button type="button" onclick="verifyRegister()">Verify & Register</button>
+        <button type="button" class="btn btn-primary" style="width: 100%;" onclick="verifyRegister()">Verify & Register</button>
         
         <p style="margin-top:20px; text-align: center;">
-            Already have an account? <a href="/login">Login here</a>
+            Already have an account? <a href="/login" style="color: var(--primary);">Login here</a>
         </p>
     </form>
-</section>
+    </div>
+</div>
 
 <script>
+function showToast(msg, type = 'error') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('toast-show'));
+    setTimeout(() => { toast.classList.remove('toast-show'); setTimeout(() => toast.remove(), 300); }, 3500);
+}
+
 async function sendOTP() {
     const email = document.getElementById("email").value;
     
     if (!email) {
-        alert("Please enter your email address");
+        showToast("Please enter your email address");
         return;
     }
 
@@ -161,12 +189,12 @@ async function sendOTP() {
         const result = await res.json();
         
         if (result.success || res.ok) {
-            alert("OTP sent to your email");
+            showToast("OTP sent to your email", "success");
         } else {
-            alert(result.error || "Failed to send OTP");
+            showToast(result.error || "Failed to send OTP");
         }
     } catch (error) {
-        alert("An error occurred. Please try again.");
+        showToast("An error occurred. Please try again.");
         console.error(error);
     }
 }
@@ -188,7 +216,7 @@ async function verifyRegister() {
 
     // Validation
     if (!data.first_name || !data.last_name || !data.dob || !data.contact || !data.email || !data.password || !data.security_q1 || !data.security_a1 || !data.security_q2 || !data.security_a2 || !data.otp) {
-        alert("Please fill in all fields");
+        showToast("Please fill in all fields");
         return;
     }
 
@@ -204,10 +232,10 @@ async function verifyRegister() {
         if (result.redirect) {
             window.location.href = result.redirect;
         } else {
-            alert(result.error || "Registration failed");
+            showToast(result.error || "Registration failed");
         }
     } catch (error) {
-        alert("An error occurred. Please try again.");
+        showToast("An error occurred. Please try again.");
         console.error(error);
     }
 }

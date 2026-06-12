@@ -1,9 +1,16 @@
-{% extends "layout.html" %}
+{% extends "layout_public.html" %}
 {% block title %}Login - GoTogether{% endblock %}
 {% block content %}
 
-<section class="glass-panel">
-    <h1>Login</h1>
+<div class="auth-wrapper">
+    <div class="back-to-home"><a href="/landing"><i class="fa-solid fa-arrow-left"></i> Back to Home</a></div>
+
+    <div class="glass-panel auth-container">
+        <div style="text-align: center; margin-bottom: var(--spacing-lg);">
+            <i class="fa-solid fa-right-to-bracket" style="font-size: 32px; color: var(--primary); margin-bottom: var(--spacing-sm);"></i>
+            <h2 style="margin-bottom: var(--spacing-xs);">Welcome Back</h2>
+            <p style="color: var(--text-secondary); font-size: 14px;">Sign in to GoTogether</p>
+        </div>
 
     <form onsubmit="event.preventDefault(); loginUser();">
         <div class="input-wrapper">
@@ -32,8 +39,8 @@
 
         <button type="submit">Login</button>
 
-        <p style="margin-top:20px; text-align: center;">
-            New user? <a href="/register">Register here</a>
+            <p style="margin-top: 20px; text-align: center;">
+            Don't have an account? <a href="/register" style="color: var(--primary);">Register here</a>
         </p>
     </form>
 
@@ -106,12 +113,23 @@
 </section>
 
 <script>
+function showToast(msg, type = 'error') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('toast-show'));
+    setTimeout(() => { toast.classList.remove('toast-show'); setTimeout(() => toast.remove(), 300); }, 3500);
+}
+
 async function loginUser() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     
     if (!email || !password) {
-        alert("Please fill in all fields");
+        showToast("Please fill in all fields");
         return;
     }
 
@@ -129,10 +147,10 @@ async function loginUser() {
         if (result.redirect) {
             window.location.href = result.redirect;
         } else {
-            alert(result.error || "Login failed");
+            showToast(result.error || "Login failed");
         }
     } catch (error) {
-        alert("An error occurred. Please try again.");
+        showToast("An error occurred. Please try again.");
         console.error(error);
     }
 }
@@ -147,7 +165,7 @@ async function verifySecurity() {
     };
 
     if (!data.email || !data.answer1 || !data.answer2) {
-        alert("Please fill all security details");
+        showToast("Please fill all security details");
         return;
     }
 
@@ -161,14 +179,14 @@ async function verifySecurity() {
         const result = await res.json();
 
         if (result.success) {
-            alert("Security answers verified. OTP sent to your email.");
+            showToast("Security answers verified. OTP sent to your email.", "success");
             document.getElementById("resetOtpSection").style.display = "block";
         } else {
-            alert(result.error || "Verification failed");
+            showToast(result.error || "Verification failed");
         }
 
     } catch (error) {
-        alert("An error occurred. Please try again.");
+        showToast("An error occurred. Please try again.");
         console.error(error);
     }
 }
@@ -181,7 +199,7 @@ async function resetPassword() {
     };
 
     if (!data.otp || !data.new_password) {
-        alert("OTP and new password required");
+        showToast("OTP and new password required");
         return;
     }
 
@@ -195,13 +213,13 @@ async function resetPassword() {
         const result = await res.json();
 
         if (result.success) {
-            alert("Password reset successful");
+            showToast("Password reset successful", "success");
             window.location.href = "/login";
         } else {
-            alert(result.error || "Failed to reset");
+            showToast(result.error || "Failed to reset");
         }
     } catch (error) {
-        alert("Something went wrong.");
+        showToast("Something went wrong.");
         console.error(error);
     }
 }

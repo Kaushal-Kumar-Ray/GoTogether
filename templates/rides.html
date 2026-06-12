@@ -4,7 +4,7 @@
 
 <section>
     <h1>Available Rides</h1>
-    <div id="rides-container" class="ride-grid"></div>
+    <div id="rides-container" class="grid" style="gap: var(--space-md);"></div>
 </section>
 
 <!-- Chat Modal -->
@@ -12,7 +12,7 @@
     <div class="chat-container">
         
         <header class="chat-header">
-            <h3 id="chat-title">🚗 Ride Chat</h3>
+            <h3 id="chat-title"><i class="fa-solid fa-car"></i> Ride Chat</h3>
             <button 
                 class="chat-close" 
                 onclick="closeChat()" 
@@ -26,14 +26,16 @@
 
         <form id="chat-form" class="chat-input-area">
             <input 
+                class="input"
                 type="text" 
                 id="chat-input" 
                 placeholder="Type your message..." 
                 required
                 aria-label="Message input"
                 autocomplete="off"
+                style="flex: 1;"
             >
-            <button type="submit" aria-label="Send message">➤</button>
+            <button type="submit" aria-label="Send message" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
         </form>
 
     </div>
@@ -46,7 +48,7 @@
     <div class="leave-modal-container">
 
         <div class="leave-modal-header">
-            <span class="leave-modal-icon">🚪</span>
+            <span class="leave-modal-icon"><i class="fa-solid fa-door-open"></i></span>
             <h3 id="leave-modal-title">Leave Ride</h3>
         </div>
 
@@ -57,7 +59,7 @@
                 <label class="leave-reason-label" for="leave-reason">Reason for leaving</label>
                 <textarea
                     id="leave-reason"
-                    class="leave-reason-input"
+                    class="input"
                     placeholder="e.g. Change of plans, found another ride, schedule conflict..."
                     maxlength="300"
                     aria-label="Reason for leaving"
@@ -66,17 +68,17 @@
             </form>
         </div>
 
-        <div class="leave-modal-footer">
+        <div class="leave-modal-footer" style="display: flex; gap: var(--space-sm);">
             <button
                 id="leave-submit-btn"
-                class="leave-submit-btn"
+                class="btn btn-primary"
                 type="button"
                 onclick="document.getElementById('leave-form').dispatchEvent(new Event('submit'))"
             >
                 Leave Ride
             </button>
             <button
-                class="leave-cancel-btn"
+                class="btn btn-secondary"
                 type="button"
                 onclick="closeLeaveModal()"
             >

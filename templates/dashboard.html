@@ -3,65 +3,72 @@
 {% block content %}
 
 <!-- Create/Search Ride Section -->
-<section class="glass-panel">
+<div class="glass-panel">
+    <h2 style="margin-top:0; font-size:1.5rem; color:var(--text-secondary); font-weight:400; margin-bottom:var(--spacing-lg);">Welcome back, {{ session.get('name', 'Rider') }}! <i class="fa-solid fa-hand-wave"></i></h2>
     <h1>Create or Search Ride</h1>
     
     <form method="POST" action="/create_ride" class="ride-form">
-        <div class="input-wrapper">
-            <label class="input-label" for="fromInput">From Location</label>
-            <input 
-                type="text" 
-                name="from" 
-                id="fromInput" 
-                placeholder="Enter start location" 
-                required
-                aria-label="From Location"
-            >
+        <div class="ride-form-grid" style="margin-bottom: var(--spacing-md);">
+            <div class="col-6 form-group">
+                <label class="form-label" for="fromInput">From Location</label>
+                <input 
+                    class="input"
+                    type="text" 
+                    name="from" 
+                    id="fromInput" 
+                    placeholder="Enter start location" 
+                    required
+                    aria-label="From Location"
+                >
+            </div>
+
+            <div class="col-6 form-group">
+                <label class="form-label" for="toInput">Destination</label>
+                <input 
+                    class="input"
+                    type="text" 
+                    name="to" 
+                    id="toInput" 
+                    placeholder="Enter end location" 
+                    required
+                    aria-label="Destination"
+                >
+            </div>
+
+            <div class="col-6 form-group">
+                <label class="form-label" for="timeInput">Departure Time</label>
+                <input 
+                    class="input"
+                    type="time" 
+                    name="time"
+                    id="timeInput" 
+                    required
+                    aria-label="Departure Time"
+                >
+            </div>
+            
+            <div class="col-6 form-group">
+                <label class="form-label" for="seatsInput">Available Seats</label>
+                <input 
+                    class="input"
+                    type="number" 
+                    name="seats"
+                    id="seatsInput" 
+                    min="1" 
+                    max="10"
+                    placeholder="Number of seats" 
+                    required
+                    aria-label="Number of Seats"
+                >
+            </div>
         </div>
 
-<div class="input-wrapper">
-            <label class="input-label" for="toInput">Destination</label>
-            <input 
-                type="text" 
-                name="to" 
-                id="toInput" 
-                placeholder="Enter end location" 
-                required
-                aria-label="Destination"
-            >
-        </div>
-
-<div class="input-wrapper">
-            <label class="input-label" for="timeInput">Departure Time</label>
-            <input 
-                type="time" 
-                name="time"
-                id="timeInput" 
-                required
-                aria-label="Departure Time"
-            >
-        </div>
-        
-        <div class="input-wrapper">
-            <label class="input-label" for="seatsInput">Available Seats</label>
-            <input 
-                type="number" 
-                name="seats"
-                id="seatsInput" 
-                min="1" 
-                max="10"
-                placeholder="Number of seats" 
-                required
-                aria-label="Number of Seats"
-            >
-        </div>
-
-        <div class="button-group">
-            <button type="submit" class="btn-create">Create Ride</button>
-            <button type="button" onclick="searchRides()" class="btn-search">Search Rides</button>
+        <div class="button-group" style="display: flex; gap: var(--space-sm);">
+            <button type="submit" class="btn btn-primary">Create Ride</button>
+            <button type="button" onclick="searchRides()" class="btn btn-secondary">Search Rides</button>
         </div>
     </form>
-</section>
+</div>
 
 <!-- Ride Listings created by the user -->
  <section>
@@ -80,7 +87,9 @@
             {% endfor %}
         {% else %}
             <div class="empty-state">
-                No rides created yet. Start by creating one above!
+                <p style="font-size:2rem; margin-bottom:12px;"><i class="fa-solid fa-car"></i></p>
+                <p>No rides created yet.</p>
+                <p style="font-size:0.9rem; margin-top:8px;">Use the form above to create your first ride!</p>
             </div>
         {% endif %}
     </div>

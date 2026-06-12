@@ -20,14 +20,14 @@
         <h3>Ride Statistics</h3>
         <div class="profile-stats">
             <div class="stat-item">
-                <span class="stat-icon">🚗</span>
+                <span class="stat-icon"><i class="fa-solid fa-car"></i></span>
                 <div>
                     <p class="stat-label">Rides Created</p>
                     <p class="stat-value">{{ rides_created }}</p>
                 </div>
             </div>
             <div class="stat-item">
-                <span class="stat-icon">🤝</span>
+                <span class="stat-icon"><i class="fa-solid fa-handshake"></i></span>
                 <div>
                     <p class="stat-label">Rides Joined</p>
                     <p class="stat-value">{{ rides_joined }}</p>
@@ -37,8 +37,8 @@
     </div>
     <!-- Actions -->
     <div class="profile-actions">
-        <a href="/logout" class="btn-search">Logout</a>
+        <a href="/logout" class="btn btn-secondary">Logout</a>
     </div>
-</section>
+</div>
 
 {% endblock %}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GoTogether — Smart campus ride sharing. Find rides, share costs, travel safe with fellow students.">
+    <meta name="theme-color" content="#00bfff">
+    <title>GoTogether — Smart Campus Ride Sharing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="landing-page">
+
+    <!-- ═══════════════════════════════════════════
+         HERO SECTION
+    ═══════════════════════════════════════════ -->
+    <section class="landing-hero" id="hero">
+        <!-- Animated floating orbs -->
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">🚀 Built for Students, by Students</div>
+            <h1 class="hero-title">
+                Smart Campus Rides.<br>
+                <span class="hero-gradient-text">Together.</span>
+            </h1>
+            <p class="hero-subtitle">
+                Find rides, share costs, chat with co-riders, and travel safe — all in one platform powered by AI.
+            </p>
+            <div class="hero-actions">
+                <a href="/register" class="hero-btn hero-btn-primary">
+                    Get Started <span class="hero-btn-arrow">→</span>
+                </a>
+                <a href="/login" class="hero-btn hero-btn-outline">
+                    Sign In
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-scroll-indicator">
+            <span>Scroll to explore</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         FEATURES SECTION
+    ═══════════════════════════════════════════ -->
+    <section class="landing-features" id="features">
+        <div class="landing-container">
+            <div class="section-header reveal">
+                <span class="section-tag">Features</span>
+                <h2 class="section-title">Everything You Need</h2>
+                <p class="section-desc">A complete ride-sharing ecosystem designed specifically for campus life.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card reveal" style="--delay: 0s">
+                    <div class="feature-icon">🚗</div>
+                    <h3>Ride Sharing</h3>
+                    <p>Create rides or search available ones. Specify your route, time, and available seats.</p>
+                </div>
+                <div class="feature-card reveal" style="--delay: 0.1s">
+                    <div class="feature-icon">🔒</div>
+                    <h3>OTP Verified</h3>
+                    <p>Every account is verified via email OTP. Only real students get access to the platform.</p>
+                </div>
+                <div class="feature-card reveal" style="--delay: 0.2s">
+                    <div class="feature-icon">💬</div>
+                    <h3>Ride Chat</h3>
+                    <p>Coordinate with co-riders in real-time. Discuss pickup points, timings, and more.</p>
+                </div>
+                <div class="feature-card reveal" style="--delay: 0.3s">
+                    <div class="feature-icon">🧠</div>
+                    <h3>AI Route Optimizer</h3>
+                    <p>Smart routing powered by OpenRouteService API. Get distance, duration, and cost splits instantly.</p>
+                </div>
+                <div class="feature-card reveal" style="--delay: 0.4s">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Safety Scoring</h3>
+                    <p>ML-powered risk assessment for every ride. Know the safety level before you join.</p>
+                </div>
+                <div class="feature-card reveal" style="--delay: 0.5s">
+                    <div class="feature-icon">🆘</div>
+                    <h3>Emergency SOS</h3>
+                    <p>One-tap SOS button sends your live location to your email instantly. Safety first.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         HOW IT WORKS
+    ═══════════════════════════════════════════ -->
+    <section class="landing-how-it-works" id="how-it-works">
+        <div class="landing-container">
+            <div class="section-header reveal">
+                <span class="section-tag">How It Works</span>
+                <h2 class="section-title">Three Simple Steps</h2>
+                <p class="section-desc">Get from registration to your first ride in under 2 minutes.</p>
+            </div>
+
+            <div class="steps-timeline">
+                <div class="step-item reveal" style="--delay: 0s">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Register & Verify</h3>
+                        <p>Create your account with email OTP verification and security questions for account recovery.</p>
+                    </div>
+                </div>
+                <div class="step-connector reveal"></div>
+                <div class="step-item reveal" style="--delay: 0.15s">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Create or Find a Ride</h3>
+                        <p>Post your ride with route, time, and seats — or search existing rides and request to join.</p>
+                    </div>
+                </div>
+                <div class="step-connector reveal"></div>
+                <div class="step-item reveal" style="--delay: 0.3s">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Chat, Travel & Stay Safe</h3>
+                        <p>Coordinate via ride chat, check AI safety scores, and use SOS if you ever need help.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         STATS SECTION
+    ═══════════════════════════════════════════ -->
+    <section class="landing-stats" id="stats">
+        <div class="landing-container">
+            <div class="stats-grid reveal">
+                <div class="stat-card">
+                    <span class="stat-number" data-target="500">0</span>
+                    <span class="stat-suffix">+</span>
+                    <p>Students Onboarded</p>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" data-target="1200">0</span>
+                    <span class="stat-suffix">+</span>
+                    <p>Rides Completed</p>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" data-target="98">0</span>
+                    <span class="stat-suffix">%</span>
+                    <p>Safety Score</p>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" data-target="15">0</span>
+                    <span class="stat-suffix">+</span>
+                    <p>Campus Routes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         CTA SECTION
+    ═══════════════════════════════════════════ -->
+    <section class="landing-cta reveal" id="cta">
+        <div class="landing-container">
+            <div class="cta-content">
+                <h2>Ready to ride smarter?</h2>
+                <p>Join hundreds of students already sharing rides on campus. It's free, fast, and secure.</p>
+                <a href="/register" class="hero-btn hero-btn-primary cta-btn">
+                    Create Your Account <span class="hero-btn-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════════ -->
+    <footer class="landing-footer">
+        <div class="landing-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">🚀 GoTogether</span>
+                    <p>Smart Campus Ride Sharing Platform</p>
+                </div>
+                <div class="footer-links">
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                    <a href="mailto:gotogethersupport@gmail.com">Support</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Built by <strong>Team Next-Gen AI & ML</strong> — Kaushal Kumar Ray, Adarsh Sanjeet Kumar Singh, Raju Kumar</p>
+                <p class="footer-copy">&copy; 2025 GoTogether. Academic Project.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════
+         SCROLL REVEAL + COUNTER ANIMATION
+    ═══════════════════════════════════════════ -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // ── Scroll Reveal ──
+        const revealElements = document.querySelectorAll(".reveal");
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("revealed");
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ── Animated Counters ──
+        const counters = document.querySelectorAll(".stat-number");
+        let counterStarted = false;
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !counterStarted) {
+                    counterStarted = true;
+                    counters.forEach(counter => {
+                        const target = +counter.dataset.target;
+                        const duration = 2000;
+                        const step = target / (duration / 16);
+                        let current = 0;
+
+                        const update = () => {
+                            current += step;
+                            if (current < target) {
+                                counter.textContent = Math.floor(current);
+                                requestAnimationFrame(update);
+                            } else {
+                                counter.textContent = target;
+                            }
+                        };
+                        requestAnimationFrame(update);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const statsSection = document.getElementById("stats");
+        if (statsSection) counterObserver.observe(statsSection);
+
+        // ── Smooth scroll for anchor links ──
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute("href"));
+                if (target) target.scrollIntoView({ behavior: "smooth" });
+            });
+        });
+    });
+    </script>
+
+</body>
+</html>

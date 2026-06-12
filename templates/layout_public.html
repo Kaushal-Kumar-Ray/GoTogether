@@ -19,32 +19,14 @@
     
     <script src="https://kit.fontawesome.com/3e1f73c7e4.js" crossorigin="anonymous"></script>
 </head>
-<body data-username="{{ session.get('name') }}">
+<body>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="logo">🚀 GoTogether</div>
-        <div class="nav-links">
-            <a href="/">Dashboard</a>
-            <a href="/rides">Rides</a>
-            <a href="/ai">AI</a>
-            <a href="/sos">SOS</a>
-            
-            <a href="/support">Support</a>
-            <a href="/profile">Profile</a>
-        </div>
-    </nav>
+    <!-- No Navigation — public pages -->
 
     <!-- Main Content -->
     <main class="container">
         {% block content %}{% endblock %}
     </main>
-
-    <!-- Footer -->
-    <footer class="app-footer">
-        <p>🚀 <strong>GoTogether</strong> — Smart Campus Ride Sharing</p>
-        <p>Built by Team Next-Gen AI & ML | <a href="mailto:gotogethersupport@gmail.com">Support</a></p>
-    </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

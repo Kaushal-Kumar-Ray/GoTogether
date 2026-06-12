@@ -10,6 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
     initChatSystem();
     initLeaveModal();
     initRequestModals();
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/static/service-worker.js')
+            .then(reg => console.log('Service Worker registered', reg))
+            .catch(err => console.error('Service Worker registration failed', err));
+    }
 });
 
 /* ===================================================
@@ -27,6 +34,24 @@ function initRideSystem() {
 async function fetchRides() {
     const container = document.getElementById("rides-container");
     if (!container) return;
+
+    // Show skeletons on initial load (when container is empty)
+    if (container.innerHTML.trim() === "") {
+        let skeletonHtml = '';
+        for(let i=0; i<4; i++) {
+            skeletonHtml += `
+            <div class="ride-card">
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text" style="width: 40%;"></div>
+                <div class="skeleton skeleton-text" style="width: 60%; margin-bottom: 24px;"></div>
+                <div style="display: flex; gap: 8px;">
+                    <div class="skeleton skeleton-button"></div>
+                    <div class="skeleton skeleton-button"></div>
+                </div>
+            </div>`;
+        }
+        container.innerHTML = skeletonHtml;
+    }
 
     try {
         const response = await fetch("/rides/data" + window.location.search);
@@ -146,7 +171,7 @@ async function fetchRides() {
             card.innerHTML = `
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                     <h3 style="margin:0;">${ride.from} → ${ride.to}</h3>
-                    <span id="safety-${ride.ride_id}" class="safety-badge" title="Loading safety score...">⏳</span>
+                    <span id="safety-${ride.ride_id}" class="safety-badge" title="Loading safety score..."><div class="skeleton-pulse"></div></span>
                 </div>
                 <p><strong>Time:</strong> ${ride.time}</p>
                 <p>

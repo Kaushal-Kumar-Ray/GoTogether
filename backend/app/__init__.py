@@ -37,11 +37,12 @@ def create_app():
             "auth.register_verify",
             "auth.verify_security",
             "auth.reset_password",
+            "auth.landing",
             "static"
         ]
 
         if request.endpoint not in allowed and "email" not in session:
-            return redirect("/login")
+            return redirect("/landing")
 
     return app
 
